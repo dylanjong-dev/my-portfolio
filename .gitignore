@@ -1,0 +1,18 @@
+# Windows system files
+desktop.ini
+*/desktop.ini
+Thumbs.db
+ehthumbs.db
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor directories and files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+push_portfolio.bat

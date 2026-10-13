@@ -1,0 +1,1289 @@
+.dylan-work-section {
+    --dw-accent: #e0451f;
+    --dw-line: #26262e;
+    --dw-text: #f2f2f5;
+    --dw-muted: #a2a2ae;
+    --dw-dim: #6d6d78;
+    --dw-tile: #26262e;
+    position: relative;
+    overflow: clip;
+    box-sizing: border-box;
+    width: 100%;
+    background: #0b0f12;
+
+}
+
+.dylan-work-section * {
+    box-sizing: border-box
+}
+
+.dylan-work-layout {
+    display: grid;
+    grid-template-columns: 0.75fr 1fr;
+    align-items: start
+}
+
+/* 左：固定的 Marquee（1/1，无渐隐遮罩） */
+.dylan-work-marquee {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: #000;
+    --mq-scale: .82;
+    border-radius: 20px;
+    margin: 5vh 0;
+}
+
+.dylan-work-mq-stage {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+.dylan-work-mq-box {
+    width: 1720px;
+    height: 1720px;
+    flex: none;
+    transform: scale(var(--mq-scale))
+}
+
+.dylan-work-mq-grid {
+    position: relative;
+    top: 980px;
+    right: 30%;
+    width: 106%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+    transform-origin: top left;
+    transform: rotateX(55deg) rotateZ(-45deg);
+    transform-style: preserve-3d
+}
+
+.dylan-work-mq-col {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 32px;
+    will-change: transform;
+    animation: dwDown 10s ease-in-out infinite alternate
+}
+
+.dylan-work-mq-col:nth-child(even) {
+    animation-name: dwUp;
+    animation-duration: 15s
+}
+
+@keyframes dwDown {
+    to {
+        transform: translateY(100px)
+    }
+}
+
+@keyframes dwUp {
+    to {
+        transform: translateY(-100px)
+    }
+}
+
+.dylan-work-mq-item {
+    position: relative;
+    width: 100%
+}
+
+.dylan-work-mq-item img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 970/700;
+    object-fit: cover;
+    border-radius: 8px;
+    background: #111;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, .08);
+    transition: transform .3s, box-shadow .3s
+}
+
+.dylan-work-mq-item img:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px -12px rgba(255, 255, 255, .18)
+}
+
+.dylan-work-mq-lh,
+.dylan-work-mq-lv {
+    position: absolute;
+    z-index: 30;
+    pointer-events: none
+}
+
+.dylan-work-mq-lh {
+    top: -16px;
+    left: -10px;
+    width: calc(100% + 20px);
+    height: 1px;
+    background: linear-gradient(to right, rgba(255, 255, 255, .22) 50%, transparent 0) 0 0/5px 1px
+}
+
+.dylan-work-mq-lv {
+    left: -16px;
+    top: -40px;
+    width: 1px;
+    height: calc(100% + 80px);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, .22) 50%, transparent 0) 0 0/1px 5px
+}
+
+.dylan-work-marquee.is-paused .dylan-work-mq-col {
+    animation-play-state: paused
+}
+
+/* 右：自由滑动区 */
+.dylan-work-scroll {
+    min-width: 0
+}
+
+.dylan-work-part {
+    min-width: 0
+}
+
+.dylan-work-how {
+    container-type: inline-size
+}
+
+.dylan-work-stage {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3vh 6vw 5vh 45px;
+}
+
+/* ---------- 翻转卡片（与 How I work 同一套外框 / 内板 / 字体） ---------- */
+.dylan-work-flip-outer {
+    position: relative;
+    width: 100%;
+    max-width: 1192px;
+    perspective: 2400px
+}
+
+.dylan-work-flip-inner {
+    display: grid;
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: transform 1.1s cubic-bezier(.34, 1.3, .64, 1)
+}
+
+.dylan-work-flip-outer.is-pressed .dylan-work-flip-inner {
+    transform: scale(.98);
+    transition: transform .15s ease
+}
+
+.dylan-work-flip-outer.is-pumping .dylan-work-flip-inner {
+    animation: dwPump .5s cubic-bezier(.34, 1.56, .64, 1)
+}
+
+.dylan-work-flip-inner.is-flipped {
+    transform: rotateY(180deg)
+}
+
+@keyframes dwPump {
+    0% {
+        transform: scale(.98)
+    }
+
+    40% {
+        transform: scale(1.02)
+    }
+
+    100% {
+        transform: scale(1)
+    }
+}
+
+.dylan-work-shockwave {
+    position: absolute;
+    inset: 0;
+    border-radius: 40px;
+    border: 1px solid var(--dw-accent);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 2
+}
+
+.dylan-work-flip-outer.is-celebrating .dylan-work-shockwave {
+    animation: dwShock 1s ease-out forwards
+}
+
+@keyframes dwShock {
+    0% {
+        transform: scale(1);
+        opacity: .7
+    }
+
+    100% {
+        transform: scale(1.05);
+        opacity: 0
+    }
+}
+
+.dylan-work-face {
+    position: relative;
+    grid-area: 1/1;
+    border-radius: 40px;
+    /* overflow: hidden; */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 42px;
+    /* background: #0a0a0d; */
+    border: 1px solid #23232a;
+    color: var(--dw-text);
+    font-family: Inter, -apple-system, "Segoe UI", "PingFang SC", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased
+}
+
+.dylan-work-face::before {
+    content: "";
+    position: absolute;
+    inset: 14px;
+    border-radius: 28px;
+    background: #16161b
+}
+
+.dylan-work-face-back {
+    transform: rotateY(180deg)
+}
+
+
+.dylan-work-flip-inner.is-flipped .dylan-work-face-front,
+.dylan-work-flip-inner:not(.is-flipped) .dylan-work-face-back {
+    pointer-events: none
+}
+
+.dylan-work-face-back a,
+.dylan-work-face-back input,
+.dylan-work-face-back textarea,
+.dylan-work-face-back button {
+    position: relative;
+    z-index: 5
+}
+
+.dylan-work-col {
+    position: relative;
+    z-index: 4
+}
+
+.dylan-work-title {
+    font-size: clamp(28px, 2.6vw, 34px);
+    font-weight: 800;
+    letter-spacing: -.02em;
+    line-height: 1.1;
+    color: #fff;
+    margin: 0 0 12px
+}
+
+.dylan-work-desc {
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--dw-muted);
+    margin: 0 0 16px
+}
+
+.dylan-work-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px
+}
+
+.dylan-work-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    color: inherit;
+    text-decoration: none
+}
+
+.dylan-work-item.is-wide {
+    grid-column: 1/-1
+}
+
+.dylan-work-tile {
+    flex: none;
+    width: 48px;
+    height: 48px;
+    border-radius: 15px;
+    background: var(--dw-tile);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .25s
+}
+
+.dylan-work-tile svg {
+    width: 22px;
+    height: 22px;
+    stroke: #c9c9d3;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round
+}
+
+a.dylan-work-item:hover .dylan-work-tile {
+    background: var(--dw-accent)
+}
+
+a.dylan-work-item:hover .dylan-work-tile svg {
+    stroke: #fff
+}
+
+.dylan-work-item-label {
+    font-size: 16px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2
+}
+
+.dylan-work-item-value {
+    font-size: 14px;
+    color: var(--dw-muted);
+    margin-top: 2px;
+    overflow-wrap: anywhere
+}
+
+.dylan-work-item-text {
+    min-width: 0
+}
+
+.dylan-work-avatars {
+    display: flex;
+    flex: none
+}
+
+.dylan-work-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #33333b;
+    border: 2px solid #16161b;
+    overflow: hidden;
+    margin-left: -11px
+}
+
+.dylan-work-avatar:first-child {
+    margin-left: 0
+}
+
+.dylan-work-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block
+}
+
+.dylan-work-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px
+}
+
+.dylan-work-label {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .2em;
+    color: var(--dw-dim)
+}
+
+.dylan-work-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    border-radius: 99px;
+    background: #26262e;
+    color: #c9c9d3;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .05em
+}
+
+.dylan-work-pill::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--dw-accent)
+}
+
+.dylan-work-percent {
+    font-size: 44px;
+    font-weight: 800;
+    letter-spacing: -.02em;
+    line-height: 1;
+    color: #fff;
+    font-variant-numeric: tabular-nums
+}
+
+.dylan-work-bar {
+    height: 4px;
+    border-radius: 4px;
+    background: #26262e;
+    margin: 14px 0 8px;
+    overflow: hidden
+}
+
+.dylan-work-fill {
+    height: 100%;
+    width: 0;
+    background: var(--dw-accent);
+    transition: width .5s cubic-bezier(.4, 0, .2, 1)
+}
+
+.dylan-work-caption {
+    font-size: 14px;
+    color: var(--dw-muted);
+    margin-bottom: 12px
+}
+
+.dylan-work-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid var(--dw-line)
+}
+
+.dylan-work-list-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 11px 0;
+    border-top: 1px solid var(--dw-line);
+    cursor: pointer;
+    user-select: none
+}
+
+.dylan-work-checkbox {
+    flex: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid #4a4a56;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .25s, border-color .25s
+}
+
+.dylan-work-checkbox svg {
+    width: 12px;
+    height: 12px;
+    opacity: 0;
+    transform: scale(.6);
+    transition: opacity .2s, transform .2s
+}
+
+.dylan-work-list-item.is-checked .dylan-work-checkbox {
+    background: var(--dw-accent);
+    border-color: var(--dw-accent)
+}
+
+.dylan-work-list-item.is-checked .dylan-work-checkbox svg {
+    opacity: 1;
+    transform: scale(1)
+}
+
+.dylan-work-item-name {
+    flex: 1;
+    font-size: 16px;
+    color: #a2a2ae;
+    line-height: 1.4;
+    transition: color .25s
+}
+
+.dylan-work-list-item:hover .dylan-work-item-name {
+    color: #fff
+}
+
+.dylan-work-list-item.is-checked .dylan-work-item-name {
+    color: #5a5a66;
+    text-decoration: line-through
+}
+
+.dylan-work-item-index {
+    font: 800 13px/1.6 ui-monospace, Menlo, monospace;
+    color: #5a5a66
+}
+
+.dylan-work-footer {
+    margin-top: 12px;
+    min-height: 18px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--dw-muted)
+}
+
+.dylan-work-goto-form {
+    display: block;
+    width: 100%;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    padding: 0;
+    border: none;
+    background: none;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .04em;
+    color: var(--dw-accent);
+    text-align: center;
+    cursor: pointer;
+    pointer-events: none;
+    transition: max-height .3s, opacity .25s, margin-top .3s
+}
+
+.dylan-work-goto-form.is-visible {
+    max-height: 40px;
+    opacity: 1;
+    margin-top: 10px;
+    pointer-events: auto
+}
+
+.dylan-work-spark {
+    position: absolute;
+    right: 40px;
+    top: 50%;
+    font-size: 14px;
+    pointer-events: none;
+    animation: dwSpark .7s ease-out forwards
+}
+
+@keyframes dwSpark {
+    0% {
+        opacity: 1;
+        transform: translate(0, -50%) scale(.6)
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(var(--dx, 10px), calc(-50% - 26px)) scale(1)
+    }
+}
+
+.dylan-work-input,
+.dylan-work-textarea {
+    width: 100%;
+    background: #2c2c2c;
+    border: 1px solid #2a2a33;
+    border-radius: 16px;
+    padding: 14px 18px;
+    font: inherit;
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 10px;
+    transition: border-color .2s
+}
+
+.dylan-work-input::placeholder,
+.dylan-work-textarea::placeholder {
+    color: #6d6d78
+}
+
+.dylan-work-input:focus,
+.dylan-work-textarea:focus {
+    outline: none;
+    border-color: var(--dw-accent)
+}
+
+.dylan-work-textarea {
+    resize: none;
+    height: 88px;
+    line-height: 1.5
+}
+
+.dylan-work-submit {
+    width: 100%;
+    background: var(--dw-accent);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 18px;
+    font: inherit;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform .15s, background .2s
+}
+
+.dylan-work-submit:hover {
+    background: #c93a17
+}
+
+.dylan-work-submit:active {
+    transform: scale(.97)
+}
+
+.dylan-work-back-link {
+    display: block;
+    margin: 12px auto 0;
+    background: none;
+    border: none;
+    letter-spacing: .06em;
+    color: #8a8a96;
+    cursor: pointer
+}
+
+.dylan-work-back-link:hover {
+    color: #fff
+}
+
+@media (prefers-reduced-motion:reduce) {
+    .dylan-work-mq-col {
+        animation-duration: 90s
+    }
+}
+
+@media (max-width:900px) {
+    .dylan-work-layout {
+        grid-template-columns: 1fr
+    }
+
+    .dylan-work-marquee {
+        position: relative;
+        height: 360px;
+        --mq-scale: .5
+    }
+
+    .dylan-work-stage {
+        min-height: 0;
+        padding: 64px 20px
+    }
+
+    .dylan-work-face {
+        padding: 32px 26px;
+        border-radius: 28px
+    }
+
+    .dylan-work-face::before {
+        inset: 10px;
+        border-radius: 20px
+    }
+
+    .dylan-work-shockwave {
+        border-radius: 28px
+    }
+
+    .dylan-work-items {
+        grid-template-columns: 1fr
+    }
+
+    /* ===== 手机：用淡入淡出 + 轻微位移取代 3D 翻转 ===== */
+    .dylan-work-flip-outer {
+        perspective: none
+    }
+
+    .dylan-work-flip-inner,
+    .dylan-work-flip-inner.is-flipped {
+        transform-style: flat;
+        transform: none;
+        will-change: auto
+    }
+
+    .dylan-work-face * {
+        -webkit-backface-visibility: visible;
+        backface-visibility: visible
+    }
+
+    .dylan-work-face {
+        -webkit-backface-visibility: visible;
+        backface-visibility: visible
+    }
+
+    /* 不可见的一面 */
+    .dylan-work-face-back,
+    .dylan-work-flip-inner.is-flipped .dylan-work-face-front {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity .3s ease, transform .4s ease, visibility 0s linear .3s;
+    }
+
+    .dylan-work-face-back {
+        transform: translateY(18px) scale(.98)
+    }
+
+    .dylan-work-flip-inner.is-flipped .dylan-work-face-front {
+        transform: translateY(-18px) scale(.98)
+    }
+
+    /* 可见的一面 */
+    .dylan-work-face-front,
+    .dylan-work-flip-inner.is-flipped .dylan-work-face-back {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: none;
+        transition: opacity .4s ease .12s, transform .5s cubic-bezier(.22, 1, .36, 1) .12s, visibility 0s;
+    }
+
+    /* 缩短翻转前的 pump，让反应更快 */
+    .dylan-work-flip-outer.is-pumping .dylan-work-flip-inner {
+        animation: dwPump .28s ease
+    }
+
+}
+
+/* ---------- How I work（深色底；按容器宽度切换为竖向手风琴） ---------- */
+.how-dylanwork {
+    overflow-anchor: none;
+    --how-dylanwork-text: #f2f2f5;
+    --how-dylanwork-muted: #9a9aa6;
+    font-family: var(--how-dylanwork-font, Inter, -apple-system, "Segoe UI", "PingFang SC", Arial, sans-serif);
+    -webkit-font-smoothing: antialiased;
+    color: var(--how-dylanwork-text);
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 5vh 6vw 3vh 45px;
+    text-align: left;
+    line-height: normal
+}
+
+.how-dylanwork *,
+.how-dylanwork *::before,
+.how-dylanwork *::after {
+    box-sizing: border-box
+}
+
+.how-dylanwork strong {
+    color: #fff;
+    font-weight: 800
+}
+
+.how-dylanwork-head {
+    margin: 0 0 24px
+}
+
+.how-dylanwork-title {
+    margin: 0 0 6px;
+    padding: 0;
+    font-size: 40px;
+    line-height: 1.15;
+    font-weight: 800;
+    letter-spacing: -.02em;
+    color: var(--how-dylanwork-text)
+}
+
+.how-dylanwork-sub {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--how-dylanwork-muted)
+}
+
+.how-dylanwork-sub strong {
+    color: var(--how-dylanwork-text)
+}
+
+.how-dylanwork-stage {
+    overflow-x: auto
+}
+
+.how-dylanwork-frame {
+    min-width: 1200px;
+    /* background: #0a0a0d; */
+    border: 1px solid #23232a;
+    border-radius: 40px;
+    padding: 14px 14px 0
+}
+
+.how-dylanwork-acc {
+    display: flex;
+    gap: 10px;
+    height: 560px
+}
+
+.how-dylanwork-foot {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    color: #6d6d78;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .18em
+}
+
+.how-dylanwork-dots {
+    display: flex;
+    gap: 7px
+}
+
+.how-dylanwork-dot {
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 9px;
+    background: #33333b;
+    transition: width .5s, background .4s
+}
+
+.how-dylanwork-dot.how-dylanwork-on {
+    width: 32px;
+    background: #fff
+}
+
+.how-dylanwork-panel {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    overflow: hidden;
+    border-radius: 20px;
+    background: var(--how-dylanwork-c);
+    color: #111;
+    outline: none;
+    transition: flex-grow .45s cubic-bezier(.65, 0, .35, 1), background-color .5s
+}
+
+.how-dylanwork-panel.how-dylanwork-is-active {
+    flex-grow: 5.2;
+    background: #16161b;
+    color: #fff
+}
+
+.how-dylanwork-icon {
+    position: absolute;
+    top: 24px;
+    left: calc(50% - 24px);
+    width: 48px;
+    height: 48px;
+    border-radius: 15px;
+    display: grid;
+    place-items: center;
+    background: rgba(0, 0, 0, .14);
+    color: rgba(0, 0, 0, .72);
+    transition: left .45s cubic-bezier(.65, 0, .35, 1), background .5s, color .5s
+}
+
+.how-dylanwork-icon svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round
+}
+
+.how-dylanwork-is-active .how-dylanwork-icon {
+    left: 30px;
+    background: var(--how-dylanwork-c);
+    color: #111
+}
+
+.how-dylanwork-label {
+    position: absolute;
+    left: 50%;
+    bottom: 74px;
+    writing-mode: vertical-rl;
+    transform: translateX(-50%) rotate(180deg);
+    font-size: 22px;
+    font-weight: 800;
+    white-space: nowrap;
+    letter-spacing: -.01em;
+    transition: opacity .25s
+}
+
+.how-dylanwork-num {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 26px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 800;
+    transition: opacity .25s
+}
+
+.how-dylanwork-is-active .how-dylanwork-label,
+.how-dylanwork-is-active .how-dylanwork-num {
+    opacity: 0
+}
+
+.how-dylanwork-pill {
+    position: absolute;
+    top: 34px;
+    right: 26px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    border-radius: 99px;
+    background: #26262e;
+    color: #c9c9d3;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .05em
+}
+
+.how-dylanwork-pill::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--how-dylanwork-c)
+}
+
+.how-dylanwork-detail {
+    position: absolute;
+    top: 92px;
+    bottom: 28px;
+    left: 32px;
+    width: 560px;
+    display: flex;
+    flex-direction: column
+}
+
+.how-dylanwork-pill,
+.how-dylanwork-detail>* {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity .2s, transform .2s
+}
+
+.how-dylanwork-is-active .how-dylanwork-pill,
+.how-dylanwork-is-active .how-dylanwork-detail>* {
+    opacity: 1;
+    transform: none;
+    transition: opacity .3s, transform .3s
+}
+
+.how-dylanwork-is-active .how-dylanwork-pill,
+.how-dylanwork-is-active .how-dylanwork-eyebrow {
+    transition-delay: .08s
+}
+
+.how-dylanwork-eyebrow {
+    margin: 0 0 10px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .2em;
+    color: #6d6d78
+}
+
+.how-dylanwork-ty {
+    display: none
+}
+
+.how-dylanwork-h3 {
+    margin: 0 0 18px;
+    padding: 0;
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -.02em;
+    line-height: 1.1;
+    color: #fff
+}
+
+.how-dylanwork-is-active .how-dylanwork-h3 {
+    transition-delay: .1s
+}
+
+.how-dylanwork-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid #26262e
+}
+
+.how-dylanwork-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 0;
+    padding: 12px 0;
+    border-top: 1px solid #26262e;
+    font-size: 16px;
+    color: #a2a2ae;
+    line-height: 1.4
+}
+
+.how-dylanwork-idx {
+    font: 800 13px/1.6 ui-monospace, Menlo, monospace;
+    font-style: normal;
+    color: #5a5a66
+}
+
+.how-dylanwork-is-active .how-dylanwork-list,
+.how-dylanwork-is-active .how-dylanwork-quote {
+    transition-delay: .14s
+}
+
+.how-dylanwork-quote {
+    margin: 0;
+    padding: 18px 0;
+    border-top: 1px solid #26262e;
+    border-bottom: 1px solid #26262e;
+    font-size: 22px;
+    line-height: 1.35;
+    color: #a2a2ae
+}
+
+.how-dylanwork-vers {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px
+}
+
+.how-dylanwork-chip {
+    appearance: none;
+    margin: 0;
+    padding: 8px 16px;
+    border-radius: 99px;
+    border: 1px solid #33333b;
+    background: transparent;
+    color: #8a8a96;
+    cursor: pointer;
+    font: 800 12px/1 ui-monospace, Menlo, monospace;
+    letter-spacing: .06em;
+    transition: background .25s, color .25s, border-color .25s
+}
+
+.how-dylanwork-chip:hover {
+    border-color: var(--how-dylanwork-c);
+    color: #fff
+}
+
+.how-dylanwork-chip.how-dylanwork-on {
+    background: var(--how-dylanwork-c);
+    border-color: var(--how-dylanwork-c);
+    color: #111
+}
+
+.how-dylanwork-is-active .how-dylanwork-vers {
+    transition-delay: .18s
+}
+
+.how-dylanwork-shot {
+    position: relative;
+    flex: 1;
+
+    margin-top: 16px;
+    border-radius: 20px;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(var(--how-dylanwork-a, 135deg), color-mix(in srgb, var(--how-dylanwork-c) 32%, #1b1b21), #1b1b21 70%);
+    border: 1px solid #2a2a33
+}
+
+.how-dylanwork-is-active .how-dylanwork-shot {
+    transition-delay: .2s
+}
+
+.how-dylanwork-shot img {
+    transition: opacity .16s;
+    display: none;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    max-width: none
+}
+
+.how-dylanwork-shot.how-dylanwork-has-img img {
+    display: block
+}
+
+.how-dylanwork-shot.how-dylanwork-has-img .how-dylanwork-ph {
+    display: none
+}
+
+.how-dylanwork-ph {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .06em;
+    color: color-mix(in srgb, var(--how-dylanwork-c) 70%, #fff)
+}
+
+.how-dylanwork-ph svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round
+}
+
+.how-dylanwork-hint {
+    margin: 14px 0 0;
+    font-size: 13px;
+    color: var(--how-dylanwork-muted)
+}
+
+.how-dylanwork-hint-t {
+    display: none
+}
+
+@container (max-width:900px) {
+
+    .how-dylanwork-title {
+        font-size: 32px
+    }
+
+    .how-dylanwork-sub {
+        font-size: 15px
+    }
+
+    .how-dylanwork-stage {
+        overflow: visible
+    }
+
+    .how-dylanwork-frame {
+        min-width: 0;
+        border-radius: 28px;
+        padding: 10px 10px 0
+    }
+
+    .how-dylanwork-acc {
+        flex-direction: column;
+        height: auto;
+        gap: 8px
+    }
+
+    .how-dylanwork-panel {
+        flex: none;
+        display: grid;
+        grid-template-rows: 72px 0fr;
+        border-radius: 22px;
+        transition: grid-template-rows .4s cubic-bezier(.65, 0, .35, 1), background-color .5s
+    }
+
+    .how-dylanwork-panel.how-dylanwork-is-active {
+        grid-template-rows: 72px 1fr
+    }
+
+    .how-dylanwork-icon {
+        top: 12px;
+        left: 14px
+    }
+
+    .how-dylanwork-is-active .how-dylanwork-icon {
+        left: 14px
+    }
+
+    .how-dylanwork-label {
+        left: 74px;
+        right: 60px;
+        top: 0;
+        bottom: auto;
+        height: 72px;
+        display: flex;
+        align-items: center;
+        writing-mode: horizontal-tb;
+        transform: none;
+        white-space: normal;
+        font-size: 17px;
+        line-height: 1.2
+    }
+
+    .how-dylanwork-num {
+        left: auto;
+        right: 18px;
+        top: 0;
+        bottom: auto;
+        line-height: 72px;
+        font-size: 16px;
+        text-align: right
+    }
+
+    .how-dylanwork-is-active .how-dylanwork-label,
+    .how-dylanwork-is-active .how-dylanwork-num {
+        opacity: 1
+    }
+
+    .how-dylanwork-pill,
+    .how-dylanwork-h3 {
+        display: none
+    }
+
+    .how-dylanwork-ty {
+        display: inline
+    }
+
+    .how-dylanwork-detail {
+        position: static;
+        grid-row: 2;
+        min-height: 0;
+        overflow: hidden;
+        width: auto;
+        padding: 0 16px
+    }
+
+    .how-dylanwork-eyebrow {
+        margin: 2px 0 12px;
+        font-size: 11px
+    }
+
+    .how-dylanwork-item {
+        font-size: 15px;
+        padding: 11px 0
+    }
+
+    .how-dylanwork-quote {
+        font-size: 19px
+    }
+
+    .how-dylanwork-shot {
+        flex: none;
+        height: 350px;
+        margin: 16px 0
+    }
+
+    .how-dylanwork-foot {
+        height: 44px;
+        padding: 0 10px
+    }
+
+    .how-dylanwork-hint-d {
+        display: none
+    }
+
+    .how-dylanwork-hint-t {
+        display: inline
+    }
+}
+
+@media (max-width:900px) {
+
+    .how-dylanwork {
+        padding: 48px 20px
+    }
+
+    .how-dylanwork-shot {
+
+        height: 230px;
+    }
+}
+
+.how-dylanwork-shot {
+    display: none;
+    width: 100%;
+    border-radius: 24px;
+}
+
+.how-dylanwork-shot.how-dylanwork-on {
+    display: block;
+}
