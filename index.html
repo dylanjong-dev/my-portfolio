@@ -24,6 +24,44 @@
             }
         </style>
     </noscript>
+
+    <!--OG-->
+
+    <!-- Basic -->
+    <title>Dylan Jong — Portfolio</title>
+    <meta name="description"
+        content="I work in UI/UX and web design, shaping interfaces people can read fast and trust sooner.">
+    <link rel="canonical" href="https://my-portfolio.jongzhenyat0121.workers.dev/">
+    <meta name="theme-color" content="#0b0a09">
+
+    <!-- Open Graph (Facebook, WhatsApp, LinkedIn, Telegram, iMessage, Slack, Discord …) -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Dylan Jong">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:title" content="Dylan Jong — Portfolio">
+    <meta property="og:description"
+        content="I work in UI/UX and web design, shaping interfaces people can read fast and trust sooner.">
+    <meta property="og:url" content="https://my-portfolio.jongzhenyat0121.workers.dev/">
+    <meta property="og:image" content="img/open-graph.png">
+    <meta property="og:image:secure_url" content="img/open-graph.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Dylan Jong portfolio preview">
+
+    <!-- X (Twitter) -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Dylan Jong — Portfolio">
+    <meta name="twitter:description"
+        content="I work in UI/UX and web design, shaping interfaces people can read fast and trust sooner.">
+    <meta name="twitter:image" content="img/open-graph.png">
+    <meta name="twitter:image:alt" content="og-img">
+
+
+
+
+
+
     <style>
         /* ===== loader ===== */
         .intro-dylan-loader {
@@ -3559,6 +3597,394 @@
             }
         }
     </style>
+
+    <!-- =====================================================================
+     Thank-you cards 
+===================================================================== -->
+    <style>
+        .tc-layer {
+            --tc-bg: #ddd8d2;
+            --tc-ink: #16130f;
+            --tc-serif: "Playfair Display", serif;
+            --tc-sans: "Inter", sans-serif;
+            --tc-s: min(420px, 86vw, calc((100vh - 56px) / 2));
+
+            position: fixed;
+            inset: 0;
+            z-index: 2147483000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 20px;
+            visibility: hidden;
+            pointer-events: none;
+            outline: none;
+            overscroll-behavior: contain;
+            /* closing: stay "visible" until the fade-out has finished */
+            transition: visibility 0s linear .6s;
+        }
+
+        @supports (height: 100svh) {
+            .tc-layer {
+                --tc-s: min(420px, 86vw, calc((100svh - 56px) / 2));
+            }
+        }
+
+        .tc-layer.is-open {
+            visibility: visible;
+            pointer-events: auto;
+            transition-delay: 0s;
+        }
+
+        /* dim + blur: the blur radius is constant, only its opacity fades (much smoother than animating the radius) */
+        .tc-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(12, 10, 8, 0.34);
+            -webkit-backdrop-filter: blur(6px);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+            transition: opacity .45s ease;
+            will-change: opacity;
+        }
+
+        .tc-layer.is-open .tc-backdrop {
+            opacity: 1;
+            transition: opacity .9s cubic-bezier(.4, 0, .2, 1);
+        }
+
+        /* ---------- card shell (every size inside is in cqw, so it scales with the card) ---------- */
+        .tc-card {
+            container-type: inline-size;
+            position: relative;
+            flex: none;
+            width: var(--tc-s);
+            height: var(--tc-s);
+            background: var(--tc-bg);
+            color: var(--tc-ink);
+            box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            transform: translate3d(0, 14px, 0) scale(0.985);
+            transition: opacity .35s ease, transform .35s ease;
+            will-change: opacity, transform;
+        }
+
+        /* opening: slow, soft 0 -> 1 with a tiny rise; the second card follows a beat later */
+        .tc-layer.is-open .tc-card {
+            opacity: 1;
+            transform: none;
+            transition: opacity 1s cubic-bezier(.4, 0, .2, 1) .12s,
+                transform 1.3s cubic-bezier(.22, .61, .36, 1) .12s;
+        }
+
+        .tc-layer.is-open .tc-card--note {
+            transition-delay: .3s, .3s;
+        }
+
+        .tc-in {
+            box-sizing: border-box;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ---------- card 1 : logo ---------- */
+        .tc-in--logo {
+            display: grid;
+            place-items: center;
+        }
+
+        .tc-logo {
+            display: block;
+            width: 19cqw;
+            height: auto;
+            color: var(--tc-ink);
+        }
+
+        /* ---------- card 2 : note ---------- */
+        .tc-in--note {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15cqw 9cqw 7cqw;
+            text-align: center;
+        }
+
+        .tc-title {
+            margin: 0;
+            font-family: var(--tc-serif);
+            font-weight: 400;
+            font-size: 9.6cqw;
+            line-height: 1;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+        }
+
+        .tc-sub {
+            margin: 2.4cqw 0 0;
+            font-family: var(--tc-sans);
+            font-weight: 500;
+            font-size: max(8px, 2.3cqw);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .tc-copy {
+            margin: 0;
+            max-width: 76cqw;
+            font-family: var(--tc-serif);
+            font-style: italic;
+            font-weight: 400;
+            font-size: max(10.5px, 3.15cqw);
+            line-height: 1.5;
+        }
+
+        .tc-foot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            gap: 3cqw;
+        }
+
+        .tc-promo {
+            display: flex;
+            align-items: center;
+            gap: 3cqw;
+            min-width: 0;
+        }
+
+
+
+
+        .tc-small {
+            margin: 0;
+            font-family: var(--tc-sans);
+            font-weight: 400;
+            font-size: max(7px, 1.8cqw);
+            line-height: 1.5;
+            letter-spacing: 0.06em;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .tc-sig {
+            display: block;
+            width: 26cqw;
+            height: auto;
+            color: var(--tc-ink);
+        }
+
+
+
+
+        /* ======================= MOBILE ======================= */
+
+        /* very narrow cards: drop the promo words, keep the QR */
+        @container (max-width: 300px) {
+            .tc-promo .tc-small {
+                display: none;
+            }
+        }
+
+        /* phones, portrait: cards stacked, a little larger text, lighter blur */
+        @media (max-width: 600px) {
+            .tc-layer {
+                gap: 12px;
+                padding: max(14px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+                --tc-s: min(420px, 100cqw, calc((100cqh - 12px) / 2));
+            }
+
+            .tc-backdrop {
+                -webkit-backdrop-filter: blur(4px);
+                backdrop-filter: blur(4px);
+            }
+
+            .tc-sub {
+                font-size: max(9.5px, 2.5cqw);
+            }
+
+            .tc-copy {
+                max-width: 82cqw;
+                font-size: max(11.5px, 3.3cqw);
+            }
+
+            .tc-small {
+                font-size: max(8.5px, 2.1cqw);
+                letter-spacing: 0.04em;
+            }
+
+            .tc-mail {
+                text-transform: none;
+                letter-spacing: 0;
+            }
+        }
+
+        /* phones / small windows, landscape: cards sit side by side so they stay readable */
+        @media (max-height: 520px) and (orientation: landscape) {
+            .tc-layer {
+                flex-direction: row;
+                gap: 14px;
+                --tc-s: min(420px, 100cqh, calc((100cqw - 14px) / 2));
+            }
+
+            .tc-backdrop {
+                -webkit-backdrop-filter: blur(4px);
+                backdrop-filter: blur(4px);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .tc-card,
+            .tc-layer.is-open .tc-card {
+                transform: none;
+                transition: opacity .4s ease;
+            }
+
+            .tc-layer.is-open .tc-card--note {
+                transition-delay: 0s;
+            }
+        }
+    </style>
+
+    <script>
+            (function () {
+                if (window.showThankYou) return;
+
+                var FONT_HREF = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Playfair+Display:ital,wght@0,400;1,400&display=swap';
+                var layer = null;
+                var lastFocus = null;
+                var isOpen = false;
+
+                /* fonts: load once up front so the cards never flash a fallback font */
+                if (!document.querySelector('link[data-tc-fonts]')) {
+                    var link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = FONT_HREF;
+                    link.setAttribute('data-tc-fonts', '');
+                    document.head.appendChild(link);
+                }
+
+                /* copy an svg that already lives on the page, stripped of its own classes / inline animation state */
+                function cloneSvg(selector, cls) {
+                    var src = document.querySelector(selector);
+                    if (!src) return null;
+                    var svg = src.cloneNode(true);
+                    ['id', 'style', 'width', 'height'].forEach(function (a) { svg.removeAttribute(a); });
+                    svg.setAttribute('class', cls);
+                    svg.setAttribute('aria-hidden', 'true');
+                    svg.querySelectorAll('*').forEach(function (el) {
+                        ['id', 'class', 'style', 'stroke-dasharray', 'stroke-dashoffset'].forEach(function (a) { el.removeAttribute(a); });
+                    });
+                    return svg;
+                }
+
+                function fill(slotSelector, svg) {
+                    var slot = layer.querySelector(slotSelector);
+                    if (!slot) return;
+                    if (svg) slot.replaceWith(svg);
+                    else slot.remove();
+                }
+
+                function build() {
+                    layer = document.createElement('div');
+                    layer.className = 'tc-layer';
+                    layer.setAttribute('role', 'dialog');
+                    layer.setAttribute('aria-modal', 'true');
+                    layer.setAttribute('aria-label', 'Thank you');
+                    layer.tabIndex = -1;
+                    layer.setAttribute('data-lenis-prevent', '');      // smooth-scroll libs ignore this layer
+
+                    /* keep the page still while the cards are up (no overflow:hidden, so no scrollbar jump) */
+                    ['wheel', 'touchmove'].forEach(function (type) {
+                        layer.addEventListener(type, function (e) { e.preventDefault(); }, { passive: false });
+                    });
+
+                    /* ---- edit the text / links / QR path below ---- */
+                    layer.innerHTML =
+                        '<div class="tc-backdrop"></div>' +
+
+                        '<div class="tc-card tc-card--logo"><div class="tc-in tc-in--logo">' +
+                        '<i data-tc-logo></i>' +
+                        '</div></div>' +
+
+                        '<div class="tc-card tc-card--note"><div class="tc-in tc-in--note">' +
+                        '<div>' +
+                        '<h2 class="tc-title">Thank you</h2>' +
+                        '<p class="tc-sub">for your message!</p>' +
+                        '</div>' +
+
+                        '<p class="tc-copy">Thank you for reaching out and sharing your ideas with me. ' +
+                        'Every great project starts with a conversation, and I\u2019m glad yours started here. ' +
+                        'I\u2019ll read your message carefully and be in touch soon.</p>' +
+
+                        '<div class="tc-foot">' +
+                        '<div class="tc-promo">' +
+                        '<p class="tc-small">Prefer a quick chat?<br>Reach me by email:</p>' +
+                        '</div>' +
+                        '<p class="tc-small">jongzhenyat0121@gmail.com</p>' +
+                        '</div>' +
+
+                        '<i data-tc-sig></i>' +
+                        '</div></div>';
+
+                    fill('[data-tc-logo]', cloneSvg('svg.jong-logo', 'tc-logo'));
+                    fill('[data-tc-sig]', cloneSvg('[data-about-sig] svg', 'tc-sig'));
+
+                    /* click anywhere outside the cards closes it */
+                    layer.addEventListener('click', function (e) {
+                        if (!e.target.closest('.tc-card')) hide();
+                    });
+
+                    document.body.appendChild(layer);
+                }
+
+                function show() {
+                    if (!layer) build();
+                    if (isOpen) return;
+                    isOpen = true;
+                    lastFocus = document.activeElement;
+
+                    /* two frames: guarantees the hidden state is painted first, so the fade always plays */
+                    requestAnimationFrame(function () {
+                        requestAnimationFrame(function () {
+                            if (!isOpen) return;
+                            layer.classList.add('is-open');
+                            layer.focus({ preventScroll: true });
+                        });
+                    });
+                }
+
+                function hide() {
+                    if (!isOpen) return;
+                    isOpen = false;
+                    layer.classList.remove('is-open');
+                    if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+                }
+
+                var SCROLL_KEYS = [' ', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End'];
+                document.addEventListener('keydown', function (e) {
+                    if (!isOpen) return;
+                    if (e.key === 'Escape') hide();
+                    else if (SCROLL_KEYS.indexOf(e.key) > -1) e.preventDefault();
+                });
+
+                /* build the cards ahead of time (cloning the signature is heavy), so showing them is just a class change */
+                function prebuild() { if (!layer) build(); }
+                function schedule() {
+                    if (window.requestIdleCallback) window.requestIdleCallback(prebuild, { timeout: 3000 });
+                    else setTimeout(prebuild, 800);
+                }
+                if (document.readyState === 'complete') schedule();
+                else window.addEventListener('load', schedule);
+
+                window.showThankYou = show;
+                window.hideThankYou = hide;
+            })();
+    </script>
 </head>
 
 <body>
@@ -5213,291 +5639,291 @@
          NAVBAR JAVASCRIPT SYSTEM (100% 交互与动效驱动)
        ========================================================================== -->
 <script>
-        (function () {
-            'use strict';
+    (function () {
+        'use strict';
 
-            /* ----------------------------------------------------------------------
-               1. Framer Cubic-Bezier Easing Function
-               对应 Framer 原始曲线: ease: [0.11, 0.06, 0.18, 1]
-               ---------------------------------------------------------------------- */
-            function cubicBezier(p1x, p1y, p2x, p2y) {
-                const NEWTON_ITERATIONS = 8;
-                const NEWTON_MIN_SLOPE = 0.001;
-                const SUBDIVISION_PRECISION = 0.0000001;
-                const SUBDIVISION_MAX_ITERATIONS = 10;
-                const kSplineTableSize = 11;
-                const kSampleStepSize = 1.0 / (kSplineTableSize - 1.0);
-                const float32ArraySupported = typeof Float32Array === 'function';
+        /* ----------------------------------------------------------------------
+           1. Framer Cubic-Bezier Easing Function
+           对应 Framer 原始曲线: ease: [0.11, 0.06, 0.18, 1]
+           ---------------------------------------------------------------------- */
+        function cubicBezier(p1x, p1y, p2x, p2y) {
+            const NEWTON_ITERATIONS = 8;
+            const NEWTON_MIN_SLOPE = 0.001;
+            const SUBDIVISION_PRECISION = 0.0000001;
+            const SUBDIVISION_MAX_ITERATIONS = 10;
+            const kSplineTableSize = 11;
+            const kSampleStepSize = 1.0 / (kSplineTableSize - 1.0);
+            const float32ArraySupported = typeof Float32Array === 'function';
 
-                function A(aA1, aA2) { return 1.0 - 3.0 * aA2 + 3.0 * aA1; }
-                function B(aA1, aA2) { return 3.0 * aA2 - 6.0 * aA1; }
-                function C(aA1) { return 3.0 * aA1; }
+            function A(aA1, aA2) { return 1.0 - 3.0 * aA2 + 3.0 * aA1; }
+            function B(aA1, aA2) { return 3.0 * aA2 - 6.0 * aA1; }
+            function C(aA1) { return 3.0 * aA1; }
 
-                function calcBezier(aT, aA1, aA2) {
-                    return ((A(aA1, aA2) * aT + B(aA1, aA2)) * aT + C(aA1)) * aT;
-                }
-                function getSlope(aT, aA1, aA2) {
-                    return 3.0 * A(aA1, aA2) * aT * aT + 2.0 * B(aA1, aA2) * aT + C(aA1);
-                }
-
-                if (p1x === p1y && p2x === p2y) return (t) => t;
-
-                const sampleValues = float32ArraySupported
-                    ? new Float32Array(kSplineTableSize)
-                    : new Array(kSplineTableSize);
-
-                for (let i = 0; i < kSplineTableSize; ++i) {
-                    sampleValues[i] = calcBezier(i * kSampleStepSize, p1x, p2x);
-                }
-
-                function getTForX(aX) {
-                    let intervalStart = 0.0;
-                    let currentSample = 1;
-                    const lastSample = kSplineTableSize - 1;
-
-                    for (; currentSample !== lastSample && sampleValues[currentSample] <= aX; ++currentSample) {
-                        intervalStart += kSampleStepSize;
-                    }
-                    --currentSample;
-
-                    const dist = (aX - sampleValues[currentSample]) / (sampleValues[currentSample + 1] - sampleValues[currentSample]);
-                    let guessForT = intervalStart + dist * kSampleStepSize;
-
-                    const initialSlope = getSlope(guessForT, p1x, p2x);
-                    if (initialSlope >= NEWTON_MIN_SLOPE) {
-                        for (let i = 0; i < NEWTON_ITERATIONS; ++i) {
-                            const currentSlope = getSlope(guessForT, p1x, p2x);
-                            if (currentSlope === 0.0) return guessForT;
-                            const currentX = calcBezier(guessForT, p1x, p2x) - aX;
-                            guessForT -= currentX / currentSlope;
-                        }
-                        return guessForT;
-                    } else if (initialSlope === 0.0) {
-                        return guessForT;
-                    } else {
-                        let aA = intervalStart;
-                        let aB = intervalStart + kSampleStepSize;
-                        let currentT = guessForT;
-                        for (let i = 0; i < SUBDIVISION_MAX_ITERATIONS && Math.abs(calcBezier(currentT, p1x, p2x) - aX) > SUBDIVISION_PRECISION; ++i) {
-                            currentT = (aA + aB) / 2;
-                            if (calcBezier(currentT, p1x, p2x) - aX < 0) aA = currentT;
-                            else aB = currentT;
-                        }
-                        return currentT;
-                    }
-                }
-
-                return function (t) {
-                    return calcBezier(getTForX(t), p1y, p2y);
-                };
+            function calcBezier(aT, aA1, aA2) {
+                return ((A(aA1, aA2) * aT + B(aA1, aA2)) * aT + C(aA1)) * aT;
+            }
+            function getSlope(aT, aA1, aA2) {
+                return 3.0 * A(aA1, aA2) * aT * aT + 2.0 * B(aA1, aA2) * aT + C(aA1);
             }
 
-            /* ----------------------------------------------------------------------
-               2. Top Desktop Navbar Appear Animation (1.15s Delay, 1.0s Duration)
-               ---------------------------------------------------------------------- */
-            function initNavbarAppear() {
-                const navbar = document.getElementById('miduNavbarDesktop');
-                if (!navbar) return;
+            if (p1x === p1y && p2x === p2y) return (t) => t;
 
-                const DELAY = 0.5; // 秒 (稍调优启动体验)
-                const DURATION = 1.0;
-                const EASE = cubicBezier(0.11, 0.06, 0.18, 1);
+            const sampleValues = float32ArraySupported
+                ? new Float32Array(kSplineTableSize)
+                : new Array(kSplineTableSize);
 
-                const startOpacity = 0.001;
-                const endOpacity = 1;
-                const startY = 40;
-                const endY = 0;
-
-                let startTime = null;
-
-                function step(timestamp) {
-                    if (!startTime) startTime = timestamp;
-                    const elapsed = (timestamp - startTime) / 1000;
-
-                    if (elapsed < DELAY) {
-                        requestAnimationFrame(step);
-                        return;
-                    }
-
-                    const rawProgress = Math.min((elapsed - DELAY) / DURATION, 1);
-                    const easedProgress = EASE(rawProgress);
-
-                    const currentOpacity = startOpacity + (endOpacity - startOpacity) * easedProgress;
-                    const currentY = startY + (endY - startY) * easedProgress;
-
-                    navbar.style.opacity = currentOpacity;
-                    navbar.style.transform = `translateY(${currentY}px)`;
-
-                    if (rawProgress < 1) {
-                        requestAnimationFrame(step);
-                    } else {
-                        navbar.style.opacity = '1';
-                        navbar.style.transform = 'translateY(0)';
-                        navbar.classList.add('is-appeared');
-                    }
-                }
-
-                requestAnimationFrame(step);
+            for (let i = 0; i < kSplineTableSize; ++i) {
+                sampleValues[i] = calcBezier(i * kSampleStepSize, p1x, p2x);
             }
 
-            /* ----------------------------------------------------------------------
-               3. Scroll Blur Backdrop Detection
-               ---------------------------------------------------------------------- */
-            function initScrollNavbar() {
-                const navbar = document.getElementById('miduNavbarDesktop');
-                if (!navbar) return;
+            function getTForX(aX) {
+                let intervalStart = 0.0;
+                let currentSample = 1;
+                const lastSample = kSplineTableSize - 1;
 
-                function handleScroll() {
-                    if (window.scrollY > 30) {
-                        navbar.classList.add('is-scrolled');
-                    } else {
-                        navbar.classList.remove('is-scrolled');
-                    }
+                for (; currentSample !== lastSample && sampleValues[currentSample] <= aX; ++currentSample) {
+                    intervalStart += kSampleStepSize;
                 }
+                --currentSample;
 
-                window.addEventListener('scroll', handleScroll, { passive: true });
-                handleScroll();
+                const dist = (aX - sampleValues[currentSample]) / (sampleValues[currentSample + 1] - sampleValues[currentSample]);
+                let guessForT = intervalStart + dist * kSampleStepSize;
+
+                const initialSlope = getSlope(guessForT, p1x, p2x);
+                if (initialSlope >= NEWTON_MIN_SLOPE) {
+                    for (let i = 0; i < NEWTON_ITERATIONS; ++i) {
+                        const currentSlope = getSlope(guessForT, p1x, p2x);
+                        if (currentSlope === 0.0) return guessForT;
+                        const currentX = calcBezier(guessForT, p1x, p2x) - aX;
+                        guessForT -= currentX / currentSlope;
+                    }
+                    return guessForT;
+                } else if (initialSlope === 0.0) {
+                    return guessForT;
+                } else {
+                    let aA = intervalStart;
+                    let aB = intervalStart + kSampleStepSize;
+                    let currentT = guessForT;
+                    for (let i = 0; i < SUBDIVISION_MAX_ITERATIONS && Math.abs(calcBezier(currentT, p1x, p2x) - aX) > SUBDIVISION_PRECISION; ++i) {
+                        currentT = (aA + aB) / 2;
+                        if (calcBezier(currentT, p1x, p2x) - aX < 0) aA = currentT;
+                        else aB = currentT;
+                    }
+                    return currentT;
+                }
             }
 
-            /* ----------------------------------------------------------------------
-               4. Central Menu Expand / Collapse & Interactive Toggling
-               ---------------------------------------------------------------------- */
-            function initCentralMenu() {
-                const card = document.getElementById('miduMenuCard');
-                const headerBar = document.getElementById('miduMenuHeaderBar');
-                const backdrop = document.getElementById('miduMenuBackdrop');
-                const navLinks = document.querySelectorAll('.jong-nav-link-item');
+            return function (t) {
+                return calcBezier(getTForX(t), p1y, p2y);
+            };
+        }
 
-                if (!card || !headerBar) return;
+        /* ----------------------------------------------------------------------
+           2. Top Desktop Navbar Appear Animation (1.15s Delay, 1.0s Duration)
+           ---------------------------------------------------------------------- */
+        function initNavbarAppear() {
+            const navbar = document.getElementById('miduNavbarDesktop');
+            if (!navbar) return;
 
-                let isOpen = false;
+            const DELAY = 0.5; // 秒 (稍调优启动体验)
+            const DURATION = 1.0;
+            const EASE = cubicBezier(0.11, 0.06, 0.18, 1);
 
-                function openMenu() {
-                    isOpen = true;
-                    card.classList.add('is-open');
-                    if (backdrop) backdrop.classList.add('is-active');
-                    headerBar.setAttribute('aria-expanded', 'true');
+            const startOpacity = 0.001;
+            const endOpacity = 1;
+            const startY = 40;
+            const endY = 0;
+
+            let startTime = null;
+
+            function step(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const elapsed = (timestamp - startTime) / 1000;
+
+                if (elapsed < DELAY) {
+                    requestAnimationFrame(step);
+                    return;
                 }
 
-                function closeMenu() {
-                    isOpen = false;
-                    card.classList.remove('is-open');
-                    if (backdrop) backdrop.classList.remove('is-active');
-                    headerBar.setAttribute('aria-expanded', 'false');
-                }
+                const rawProgress = Math.min((elapsed - DELAY) / DURATION, 1);
+                const easedProgress = EASE(rawProgress);
 
-                function toggleMenu(e) {
-                    if (e) e.stopPropagation();
-                    if (isOpen) {
-                        closeMenu();
-                    } else {
-                        openMenu();
-                    }
-                }
+                const currentOpacity = startOpacity + (endOpacity - startOpacity) * easedProgress;
+                const currentY = startY + (endY - startY) * easedProgress;
 
-                headerBar.addEventListener('click', toggleMenu);
-                headerBar.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
+                navbar.style.opacity = currentOpacity;
+                navbar.style.transform = `translateY(${currentY}px)`;
+
+                if (rawProgress < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    navbar.style.opacity = '1';
+                    navbar.style.transform = 'translateY(0)';
+                    navbar.classList.add('is-appeared');
+                }
+            }
+
+            requestAnimationFrame(step);
+        }
+
+        /* ----------------------------------------------------------------------
+           3. Scroll Blur Backdrop Detection
+           ---------------------------------------------------------------------- */
+        function initScrollNavbar() {
+            const navbar = document.getElementById('miduNavbarDesktop');
+            if (!navbar) return;
+
+            function handleScroll() {
+                if (window.scrollY > 30) {
+                    navbar.classList.add('is-scrolled');
+                } else {
+                    navbar.classList.remove('is-scrolled');
+                }
+            }
+
+            window.addEventListener('scroll', handleScroll, { passive: true });
+            handleScroll();
+        }
+
+        /* ----------------------------------------------------------------------
+           4. Central Menu Expand / Collapse & Interactive Toggling
+           ---------------------------------------------------------------------- */
+        function initCentralMenu() {
+            const card = document.getElementById('miduMenuCard');
+            const headerBar = document.getElementById('miduMenuHeaderBar');
+            const backdrop = document.getElementById('miduMenuBackdrop');
+            const navLinks = document.querySelectorAll('.jong-nav-link-item');
+
+            if (!card || !headerBar) return;
+
+            let isOpen = false;
+
+            function openMenu() {
+                isOpen = true;
+                card.classList.add('is-open');
+                if (backdrop) backdrop.classList.add('is-active');
+                headerBar.setAttribute('aria-expanded', 'true');
+            }
+
+            function closeMenu() {
+                isOpen = false;
+                card.classList.remove('is-open');
+                if (backdrop) backdrop.classList.remove('is-active');
+                headerBar.setAttribute('aria-expanded', 'false');
+            }
+
+            function toggleMenu(e) {
+                if (e) e.stopPropagation();
+                if (isOpen) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            }
+
+            headerBar.addEventListener('click', toggleMenu);
+            headerBar.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleMenu();
+                }
+            });
+
+            if (backdrop) {
+                backdrop.addEventListener('click', closeMenu);
+            }
+
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (isOpen && !card.contains(e.target) && (!backdrop || !backdrop.contains(e.target))) {
+                    closeMenu();
+                }
+            });
+
+            // ESC key to close
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && isOpen) {
+                    closeMenu();
+                }
+            });
+
+            /* ------------------------------------------------------------------
+               5. Smooth Section Navigation & Active State Tracking
+               ------------------------------------------------------------------ */
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const targetId = link.getAttribute('data-target');
+                    const targetEl = document.getElementById(targetId);
+
+                    if (targetEl) {
                         e.preventDefault();
-                        toggleMenu();
+
+                        // Update active UI
+                        updateActiveLink(link);
+
+                        // Smooth scroll
+                        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                        // Close menu
+                        setTimeout(closeMenu, 250);
                     }
                 });
+            });
 
-                if (backdrop) {
-                    backdrop.addEventListener('click', closeMenu);
+            function updateActiveLink(activeLink) {
+                navLinks.forEach(item => {
+                    item.classList.remove('is-active');
+                    const pill = item.querySelector('.midu-nav-active-pill');
+                    if (pill) pill.remove();
+                });
+
+                activeLink.classList.add('is-active');
+                const leftContainer = activeLink.querySelector('.jong-nav-item-left');
+                if (leftContainer && !leftContainer.querySelector('.midu-nav-active-pill')) {
+                    const pill = document.createElement('span');
+                    pill.className = 'midu-nav-active-pill';
+                    pill.textContent = 'Active';
+                    leftContainer.appendChild(pill);
                 }
-
-                // Close menu when clicking outside
-                document.addEventListener('click', (e) => {
-                    if (isOpen && !card.contains(e.target) && (!backdrop || !backdrop.contains(e.target))) {
-                        closeMenu();
-                    }
-                });
-
-                // ESC key to close
-                document.addEventListener('keydown', (e) => {
-                    if (e.key === 'Escape' && isOpen) {
-                        closeMenu();
-                    }
-                });
-
-                /* ------------------------------------------------------------------
-                   5. Smooth Section Navigation & Active State Tracking
-                   ------------------------------------------------------------------ */
-                navLinks.forEach(link => {
-                    link.addEventListener('click', (e) => {
-                        const targetId = link.getAttribute('data-target');
-                        const targetEl = document.getElementById(targetId);
-
-                        if (targetEl) {
-                            e.preventDefault();
-
-                            // Update active UI
-                            updateActiveLink(link);
-
-                            // Smooth scroll
-                            targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-                            // Close menu
-                            setTimeout(closeMenu, 250);
-                        }
-                    });
-                });
-
-                function updateActiveLink(activeLink) {
-                    navLinks.forEach(item => {
-                        item.classList.remove('is-active');
-                        const pill = item.querySelector('.midu-nav-active-pill');
-                        if (pill) pill.remove();
-                    });
-
-                    activeLink.classList.add('is-active');
-                    const leftContainer = activeLink.querySelector('.jong-nav-item-left');
-                    if (leftContainer && !leftContainer.querySelector('.midu-nav-active-pill')) {
-                        const pill = document.createElement('span');
-                        pill.className = 'midu-nav-active-pill';
-                        pill.textContent = 'Active';
-                        leftContainer.appendChild(pill);
-                    }
-                }
-
-                // Intersection Observer for scroll section highlighting
-                const sections = document.querySelectorAll('section[id]');
-                const observerOptions = {
-                    root: null,
-                    rootMargin: '-20% 0px -60% 0px',
-                    threshold: 0
-                };
-
-                const sectionObserver = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            const id = entry.target.getAttribute('id');
-                            const matchedLink = document.querySelector(`.jong-nav-link-item[data-target="${id}"]`);
-                            if (matchedLink && !matchedLink.classList.contains('is-active')) {
-                                updateActiveLink(matchedLink);
-                            }
-                        }
-                    });
-                }, observerOptions);
-
-                sections.forEach(sec => sectionObserver.observe(sec));
             }
 
-            /* Initialize all systems when DOM is ready */
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', () => {
-                    initNavbarAppear();
-                    initScrollNavbar();
-                    initCentralMenu();
+            // Intersection Observer for scroll section highlighting
+            const sections = document.querySelectorAll('section[id]');
+            const observerOptions = {
+                root: null,
+                rootMargin: '-20% 0px -60% 0px',
+                threshold: 0
+            };
+
+            const sectionObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        const matchedLink = document.querySelector(`.jong-nav-link-item[data-target="${id}"]`);
+                        if (matchedLink && !matchedLink.classList.contains('is-active')) {
+                            updateActiveLink(matchedLink);
+                        }
+                    }
                 });
-            } else {
+            }, observerOptions);
+
+            sections.forEach(sec => sectionObserver.observe(sec));
+        }
+
+        /* Initialize all systems when DOM is ready */
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
                 initNavbarAppear();
                 initScrollNavbar();
                 initCentralMenu();
-            }
+            });
+        } else {
+            initNavbarAppear();
+            initScrollNavbar();
+            initCentralMenu();
+        }
 
-        })();
+    })();
 </script>
 
 <!-- hero-part2 -->
@@ -6519,7 +6945,8 @@
 <script>
     (function () {
         var TO = 'jongzhenyat0121@gmail.com';
-        var ENDPOINT = 'https://formspree.io/f/mwlpjbbz';
+        var ACCESS_KEY = 'e75122ed-455f-4159-91eb-62d565999b58';
+        var ENDPOINT = 'https://api.web3forms.com/submit';
         var btn = document.querySelector('[data-dylan-work-cta]'); if (!btn) return;
         var face = btn.closest('.dylan-work-face'),
             name = face.querySelector('input[type=text]'),
@@ -6541,9 +6968,10 @@
             btn.disabled = true; btn.textContent = 'Sending…';
             fetch(ENDPOINT, {
                 method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                body: JSON.stringify({ name: n, email: m, message: t, terms_acknowledged: 'yes' })
+                body: JSON.stringify({ access_key: ACCESS_KEY, subject: 'Project enquiry from ' + n, from_name: 'Portfolio website', name: n, email: m, message: t })
             })
-                .then(function (r) { if (!r.ok) throw 0; btn.textContent = 'Sent ✓ Talk soon'; name.value = mail.value = msg.value = ''; reset(4000); })
+                .then(function (r) { return r.json(); })
+                .then(function (d) { if (!d.success) throw 0; btn.textContent = 'Sent ✓ Talk soon'; name.value = mail.value = msg.value = ''; if (window.showThankYou) window.showThankYou(); reset(4000); })
                 .catch(function () { btn.textContent = 'Something went wrong, try again'; reset(3000); });
         });
     })();
@@ -6674,7 +7102,8 @@
             });
         });
         window.addEventListener('resize', placeThumb);
-        const ENDPOINT = 'https://formspree.io/f/mwlpjbbz';
+        const ACCESS_KEY = 'e75122ed-455f-4159-91eb-62d565999b58';
+        const ENDPOINT = 'https://api.web3forms.com/submit';
         const submitBtn = form.querySelector('.cf-submit');
 
         function resetForm() {
@@ -6698,8 +7127,10 @@
             const type = form.querySelector('input[name="type"]').value;
             const panel = form.querySelector('[data-mode-panel="' + type + '"]');
             const data = {
+                access_key: ACCESS_KEY,
+                subject: 'New ' + type + ' enquiry from ' + name,
+                from_name: 'Portfolio website',
                 source: 'navbar contact form',
-                _subject: 'New ' + type + ' enquiry from ' + name,
                 type, name, email
             };
             panel.querySelectorAll('[data-multi],[data-single]').forEach((g) => {
@@ -6719,11 +7150,13 @@
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify(data)
                 });
-                if (!r.ok) throw new Error();
+                const result = await r.json();
+                if (!r.ok || !result.success) throw new Error();
                 submitBtn.textContent = 'Sent ✓';
                 setTimeout(() => {
                     forceClose();
                     resetForm();
+                    if (window.showThankYou) window.showThankYou();
                     submitBtn.textContent = label;
                     submitBtn.disabled = false;
                 }, 1200);
