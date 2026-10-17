@@ -412,6 +412,11 @@
             }
         }
 
+
+        .trust-fill {
+            filter: none;
+        }
+
         /* 第一行：名字排版 */
         .name-row {
             display: flex;
@@ -1870,12 +1875,7 @@
             }
         }
 
-        /* =====================================================================
-   iw-film-reel · MOBILE / TOUCH FIX
-   Put this at the END of iw-film-reel.css (it overrides the older rules).
-   Fixes: frame bigger than the video, white strip at the bottom,
-          blank / slow videos while swiping on phones.
-===================================================================== */
+        /*iw-film-reel · MOBILE / TOUCH FI */
 
         /* 1) white strip: follow the *visible* height (dvh), not the small one (svh),
       and paint the pin spacer so the page background can never show through */
@@ -2007,6 +2007,29 @@
                 align-self: start;
             }
         }
+
+        /* --debug-- */
+        .iw-film-reel__grain,
+        .iw-intro__grain {
+            mix-blend-mode: normal;
+            opacity: 0.06;
+        }
+
+        .iw-film-reel__window::before {
+            mix-blend-mode: normal;
+            background: linear-gradient(180deg, rgba(255, 170, 100, .05), rgba(120, 30, 10, .14));
+        }
+
+        .iw-film-reel__flash {
+            mix-blend-mode: normal;
+        }
+
+        .iw-film-reel.is-offscreen .iw-film-reel__grain,
+        .iw-film-reel.is-offscreen .iw-film-reel__viewport {
+            animation-play-state: paused;
+        }
+
+
 
         /* ==========================================================================
            CONTACT DRAWER
@@ -3177,6 +3200,15 @@
             }
         }
 
+        /* -debug- */
+        .about,
+        .about-frame,
+        .about-title,
+        .me-body,
+        .me-photo,
+        .me-side {
+            will-change: auto;
+        }
 
         /* =====================================================
        FAQ（前缀 dylan-faq-）：玻璃层 —— 上方透明，往下渐进模糊并过渡到 #f4f4f4
@@ -3846,6 +3878,16 @@
 
             .tc-layer.is-open .tc-card--note {
                 transition-delay: 0s;
+            }
+        }
+
+        @media (max-width: 900px),
+        (hover: none) {
+
+            .dylan-faq::before,
+            .dylan-faq::after,
+            .footer-dylan::before {
+                display: none;
             }
         }
     </style>
@@ -4548,7 +4590,7 @@
 
                             <figure class="iw-film-reel__frame" style="--iw-tint:#7a3b1e">
                                 <div class="iw-film-reel__window">
-                                    <video muted loop playsinline preload="auto">
+                                    <video muted loop playsinline preload="metadata" poster="video/keystone.webp">
                                         <source src="video/keystone.mp4" type="video/mp4">
                                     </video>
                                 </div>
@@ -4556,7 +4598,7 @@
 
                             <figure class="iw-film-reel__frame" style="--iw-tint:#2f4a5a">
                                 <div class="iw-film-reel__window">
-                                    <video muted loop playsinline preload="auto">
+                                    <video muted loop playsinline preload="none" poster="video/elimaster.webp">
                                         <source src="video/elimaster.mp4" type="video/mp4">
                                     </video>
                                 </div>
@@ -4564,7 +4606,7 @@
 
                             <figure class="iw-film-reel__frame" style="--iw-tint:#000">
                                 <div class="iw-film-reel__window">
-                                    <video muted loop playsinline preload="auto">
+                                    <video muted loop playsinline preload="none" poster="video/space.webp">
                                         <source src="video/space.mp4" type="video/mp4">
                                     </video>
                                 </div>
@@ -4572,7 +4614,7 @@
 
                             <figure class="iw-film-reel__frame" style="--iw-tint:#000">
                                 <div class="iw-film-reel__window">
-                                    <video muted loop playsinline preload="auto">
+                                    <video muted loop playsinline preload="none" poster="video/glass.webp">
                                         <source src="video/glass.mp4" type="video/mp4">
                                     </video>
                                 </div>
@@ -4580,7 +4622,7 @@
 
                             <figure class="iw-film-reel__frame" style="--iw-tint:#000">
                                 <div class="iw-film-reel__window">
-                                    <video muted loop playsinline preload="auto">
+                                    <video muted loop playsinline preload="none" poster="video/audionix.webp">
                                         <source src="video/audionix.mp4" type="video/mp4">
                                     </video>
                                 </div>
@@ -6039,7 +6081,7 @@
                 layerBStack.style.transform = 'translate3d(0,' + lerp(bStart, bEnd, rise) + '%,0)';
 
                 /* Type stays put; white fill grows with the B zone. */
-                const fill = (clamp((p - 0.4) / 0.6, 0, 1) * 100) + '%';
+                const fill = (Math.round(clamp((p - 0.4) / 0.6, 0, 1) * 1000) / 10) + '%';
                 trustEls.forEach(function (el) {
                     el.style.setProperty('--fill', fill);
                 });
@@ -6355,7 +6397,7 @@
         var count = root.querySelector('.intro-dylan-loader-count');
         var N = 6, STAGGER = 55, STRIP_DUR = 480;      /* 横幅数量、每条间隔(ms)、每条动画时长(ms) */
         var DUR = 800, HOLD = 80, KEY = 'introDylanSeen';
-        var loaded = document.readyState === 'complete';
+        var loaded = false;
         var blocking = false;                     /* 不隐藏滚动条，只在动画期间拦截滚动操作 */
         function stop(e) { if (blocking) e.preventDefault() }
         window.addEventListener('wheel', stop, { passive: false });
@@ -6363,7 +6405,25 @@
         window.addEventListener('keydown', function (e) {
             if (blocking && [32, 33, 34, 35, 36, 37, 38, 39, 40].indexOf(e.keyCode) > -1) e.preventDefault();
         });
-        window.addEventListener('load', function () { loaded = true });
+        function waitForHero() {
+            var imgs = Array.prototype.slice.call(document.querySelectorAll('#layerA, #layerANobg'));
+            var ready = imgs.map(function (img) {
+                if (img.complete && img.naturalWidth) return Promise.resolve();
+                return new Promise(function (resolve) {
+                    img.addEventListener('load', resolve, { once: true });
+                    img.addEventListener('error', resolve, { once: true });
+                });
+            });
+            Promise.race([
+                Promise.all(ready),
+                new Promise(function (r) { setTimeout(r, 2500); })   /* 最多等 2.5 秒 */
+            ]).then(function () { loaded = true; });
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', waitForHero);
+        } else {
+            waitForHero();
+        }
 
         /* 生成横幅：相邻两条重叠 1px，避免出现缝隙；越靠下的越先动 */
         for (var i = 0; i < N; i++) {
@@ -6410,10 +6470,8 @@
         var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
         var isReload = nav ? nav.type === 'reload' : (performance.navigation && performance.navigation.type === 1);
         if (seen() && !isReload) { root.classList.add('is-gone') } else { run() }
-        document.querySelector('.demo-replay').addEventListener('click', function () {
-            try { sessionStorage.removeItem(KEY) } catch (e) { }
-            run();
-        });
+
+
     })();
 </script>
 
@@ -6529,6 +6587,15 @@
 
 
 <!-- interactiveweb -->
+<script>
+    (function () {
+        var s = document.getElementById('interactive-web');
+        if (!s || !('IntersectionObserver' in window)) return;
+        new IntersectionObserver(function (e) {
+            s.classList.toggle('is-offscreen', !e[0].isIntersecting);
+        }, { rootMargin: '100px' }).observe(s);
+    })();
+</script>
 <script defer src="js/iw-film-reel.js"></script>
 
 <!-- ========== /REDESIGN SHOWCASE SECTION ========== -->
